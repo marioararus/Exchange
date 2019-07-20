@@ -15,12 +15,95 @@
               android:text="@string/emptyState"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
+            android:id="@+id/clItemCurrencyDefault"
+            android:layout_marginRight="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="32dp"
+            android:layout_height="70dp">
+        <androidx.cardview.widget.CardView
+                android:id="@+id/cvImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:elevation="12dp"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="1.9"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                    android:id="@+id/ivCurrency"
+                    android:layout_width="match_parent"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_height="match_parent"/>
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+                android:id="@+id/tvRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/cvImage"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/cities"
+                android:layout_marginLeft="16dp"/>
+        <TextView
+                android:id="@+id/tvFullNameRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvRate"
+                app:layout_constraintStart_toStartOf="@id/tvRate"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="@tools:sample/cities"/>
+
+        <EditText
+                android:id="@+id/etAmount"
+                android:hint="0"
+                android:maxLength="250"
+                android:maxLines="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cvImage"
+                app:layout_constraintBottom_toBottomOf="@id/cvImage"
+                app:layout_constraintStart_toEndOf="@id/tvFullNameRate"
+                android:textSize="16sp"
+                android:gravity="end"
+                tools:text="@tools:sample/us_zipcodes"
+                android:layout_marginRight="8dp"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View android:layout_width="0dp"
+          android:layout_height="2dp"
+          app:layout_constraintStart_toStartOf="parent"
+          android:id="@+id/view"
+          android:layout_marginTop="16dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          android:background="@color/cardview_dark_background"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/clItemCurrencyDefault"/>
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCurrency"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view"
             tools:listitem="@layout/item_currency"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

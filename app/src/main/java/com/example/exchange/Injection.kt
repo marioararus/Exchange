@@ -9,8 +9,8 @@ import com.example.exchange.ui.CurrencyViewModelFactory
  * Created by Marioara Rus on 2019-07-17
  */
 
-fun provideCurrencyViewModelFactory() =
-    CurrencyViewModelFactory(getCurrenciesUseCase = provideCurrencyUseCase())
+fun provideCurrencyViewModelFactory(currencyCode: String) =
+    CurrencyViewModelFactory(currencyCode = currencyCode, getCurrenciesUseCase = provideCurrencyUseCase())
 
 fun provideCurrencyUseCase() =
     GetCurrenciesUseCase(remoteCurrencyDataSource = RemoteCurrencyDataSource())

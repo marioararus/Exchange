@@ -16,9 +16,9 @@ class RemoteCurrencyDataSource : RemoteDataSource() {
     private val TAG = RemoteCurrencyDataSource::class.java.simpleName
     private val currencyService: CurrencyService = retrofit.create(CurrencyService::class.java)
 
-    suspend fun getCurrency(): Result<Currency, Exception> {
+    suspend fun getCurrency(currency: String): Result<Currency, Exception> {
         return try {
-            val remoteCurrency = currencyService.getCurrencies().await()
+            val remoteCurrency = currencyService.getCurrencies(currency).await()
 
             if (remoteCurrency != null) {
                 remoteCurrency.toCurrency()

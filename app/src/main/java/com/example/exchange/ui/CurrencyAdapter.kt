@@ -19,13 +19,14 @@ import kotlinx.android.synthetic.main.item_currency.*
 internal class CurrencyAdapter(val context: Context) :
     RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
-    private var currencyRates: List<CurrencyRate> = arrayListOf()
-    fun setCurrencies(currencyRates: List<CurrencyRate>) {
+    private var editableNumber: Float = 0F
+    private var currencyRates: MutableList<CurrencyRate> = mutableListOf()
+    fun setCurrencies(currencyRates: MutableList<CurrencyRate>) {
         this.currencyRates = currencyRates
         notifyDataSetChanged()
     }
 
-    private var onItemClicked: OnItemClicked? = null
+    var onItemClicked: OnItemClicked? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
         return CurrencyViewHolder(
@@ -37,15 +38,17 @@ internal class CurrencyAdapter(val context: Context) :
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         holder.bindCurrency(currencyRates[position])
 
-        holder.itemView.setOnClickListener {
-            holder.currencyRate.amount?.let { it1 -> onItemClicked?.onClick(it1) }
+        holder.itemView.setOnClickListener { itemView ->
+            holder.currencyRate.let { currencyRate ->
+                onItemClicked?.onClick(currencyRate)
+            }
         }
     }
 
     override fun getItemCount() = currencyRates.size
 
-    internal inner class CurrencyViewHolder(override val containerView: View)
-    : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    internal inner class CurrencyViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
+        LayoutContainer {
 
         lateinit var currencyRate: CurrencyRate
         fun bindCurrency(currencyRate: CurrencyRate) {
@@ -53,7 +56,8 @@ internal class CurrencyAdapter(val context: Context) :
             currencyRate.run {
                 tvRate.text = code
                 tvFullNameRate.text = name
-                etAmount.text = amount.toString()
+                tvAmount.text = multiplyWithCurrencyToString(editableNumber, amount)
+
                 val requestOptions = RequestOptions()
                     .error(R.drawable.flag_square_european_union)
 
@@ -72,8 +76,27 @@ internal class CurrencyAdapter(val context: Context) :
             }
         }
     }
+
+    fun setEditableNumber(currencyNumber: Float) {
+        this.editableNumber = currencyNumber
+        notifyDataSetChanged()
+    }
+
+    fun multiplyWithCurrencyToString(currencyNumber: Float, amount: Float?): String {
+        var finalAmount = 0F
+        amount?.let {
+            finalAmount = if (amount != 0F && currencyNumber != 0F) {
+                currencyNumber * amount
+            } else if (currencyNumber == 0F) {
+                currencyNumber
+            } else {
+                amount
+            }
+        }
+        return finalAmount.toString()
+    }
 }
 
 interface OnItemClicked {
-    fun onClick(currencyAmount: Float)
+    fun onClick(currencyRate: CurrencyRate)
 }

@@ -6,19 +6,19 @@ import kotlinx.coroutines.withContext
 
 /**
  *
- * Created by Marioara Rus on 2019-07-03
+ * Created by Marioara Rus on 2019-07-18
  */
-abstract class UseCaseWithoutParams<T> : CoroutineScope, BaseUseCase<T>() {
+abstract class UseCaseWithParams<in Params, T> : CoroutineScope, BaseUseCase<T>() {
 
-    protected abstract suspend fun run()
+    protected abstract suspend fun run(params: Params)
 
     /**
      * By overriding invoke, we allow use cases to be called as "invoking"
      */
-    operator fun invoke() {
+    operator fun invoke(params: Params) {
         launch {
             withContext(backgroundDispatcher) {
-                run()
+                run(params)
             }
         }
     }

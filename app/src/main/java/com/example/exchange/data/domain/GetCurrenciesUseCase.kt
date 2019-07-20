@@ -9,12 +9,12 @@ import com.example.exchange.data.model.remote.retrofit.currency.RemoteCurrencyDa
  */
 class GetCurrenciesUseCase(
     private val remoteCurrencyDataSource: RemoteCurrencyDataSource
-) : UseCaseWithoutParams<Currency>() {
+) : UseCaseWithParams<String, Currency>() {
 
-    override suspend fun run() {
+    override suspend fun run(currency: String) {
         resultChannel.send(Result.State.Loading())
 
-        val remoteCurrencyResult = remoteCurrencyDataSource.getCurrency()
+        val remoteCurrencyResult = remoteCurrencyDataSource.getCurrency(currency)
 
         resultChannel.send(remoteCurrencyResult)
 

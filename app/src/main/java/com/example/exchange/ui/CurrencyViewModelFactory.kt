@@ -11,13 +11,14 @@ import java.lang.IllegalArgumentException
  * Created by Marioara Rus on 2019-07-17
  */
 class CurrencyViewModelFactory(
+    private val currencyCode: String,
     private val getCurrenciesUseCase: GetCurrenciesUseCase
 ) : ViewModelProvider.Factory {
 
     @ObsoleteCoroutinesApi
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CurrencyViewModel::class.java)) {
-            return CurrencyViewModel(getCurrenciesUseCase) as T
+            return CurrencyViewModel(currencyCode, getCurrenciesUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

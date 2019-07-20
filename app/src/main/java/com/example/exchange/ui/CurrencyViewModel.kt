@@ -3,6 +3,7 @@ package com.example.exchange.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.exchange.BaseViewModel
+import com.example.exchange.RepeatHelper
 import com.example.exchange.data.domain.GetCurrenciesUseCase
 import com.example.exchange.data.domain.Result
 import com.example.exchange.data.entity.Currency
@@ -13,6 +14,7 @@ import com.example.exchange.data.entity.CurrencyRate
  * Created by Marioara Rus on 2019-07-17
  */
 class CurrencyViewModel(
+    var currencyCode: String,
     private val getCurrenciesUseCase: GetCurrenciesUseCase
 ) : BaseViewModel() {
 
@@ -33,7 +35,9 @@ class CurrencyViewModel(
         get() = _showLoading
 
     init {
-        getCurrencies()
+        getCurrenciesUseCase.listen(
+            ::handleState, ::handleFailure, ::handleCurrencySuccess
+        )
     }
 
     private fun handleFailure(exception: Exception) {
@@ -49,18 +53,15 @@ class CurrencyViewModel(
 
     private fun handleCurrencySuccess(data: Currency) {
         _currency.value = data
-        getCurrencyRates()
-    }
-
-    fun getCurrencyRates() {
-        _currencyRates.value = currency.value?.currencyRates
+        val rate = data.currencyRates.find { it.code == data.code }
+        val rates = data.currencyRates.toMutableList()
+        rates.remove(rate)
+        _currencyRates.value = rates
     }
 
     fun getCurrencies() {
-        getCurrenciesUseCase.listen(
-            ::handleState, ::handleFailure, ::handleCurrencySuccess
-        )
-        getCurrenciesUseCase()
-
+        RepeatHelper.repeatDelayed(1000) {
+            getCurrenciesUseCase(currencyCode)
+        }
     }
 }
